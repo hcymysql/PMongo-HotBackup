@@ -1,12 +1,15 @@
 Percona MongoDB HotBackup热备份工具
 
 前言：
+
 目前官方MongoDB社区版是不支持Hot Backup热备份的，我们只能通过mongodump等逻辑备份工具导出bson文件，再mongorestore导入，类似MySQL的mysqldump工具。
 
 在备份副本集时，我们需指定--oplog选项记录备份间产生的增量数据，类似mysqldump --single-transaction --master-data=2（做一致性快照并记录当前的binlog点）。
+
 对副本集的成员恢复，需先切成单机版，mongorestore必须指定--oplogReplay选项，以恢复到某一时刻的快照，最后还需填充oplog（增量数据以哪个位置点开始断点续传），mongorestore -d local -c oplog.rs dump/oplog.bson，最后一步再切为副本集成员重新启动。
 
 中小型数据库备份起来简单快捷，如果过TB级的数据量，那将是痛苦的。
+
 如果你的oplog设置过小，很有可能在备份恢复这段时间，oplog被覆盖重写，那么你将永远无法加入副本集集群里。
 
 
@@ -46,6 +49,7 @@ Percona MongoDB HotBackup热备份原理：
 这里我封装了一个PHP脚本，直接在SHELL里运行即可。
 
 1、环境准备：
+
 shell> yum install -y php-pear php-devel php gcc openssl openssl-devel cyrus-sasl cyrus-sasl-devel 
 
 2、php-mongo驱动安装：
@@ -61,6 +65,7 @@ db.createUser({user:"admin",pwd:"123456",roles:[{role:"root",db:"admin"}]})
 4、修改pmongo_bak.php配置信息
 
 //*************修改下面的配置信息***************//
+
 $user = "admin"; //使用root用户权限
 
 $pwd = '123456'; 
@@ -76,6 +81,7 @@ $BAKDIR = "/data/bak/";
 $BAKDIR .= date('Y_m_d_H_i_s');
 
 //*************下面的代码不用修改***************//
+
 $m = new MongoBak($user,$pwd,$host,$port,$authdb,$BAKDIR);
 ......
 
@@ -88,5 +94,6 @@ shell> php pmongo_bak.php（以root权限运行）
 00 01 * * * /usr/bin/php /root/php_mongodb/pmongo_bak.php > /root/php_mongodb/bak_status.log 2 >&1
 
 7、不支持远程备份，需将备份脚本部署在从库里。如果你想把数据备份到远程，可以采用NFS等文件系统mount挂载上。
+
 
 
