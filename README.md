@@ -48,10 +48,13 @@ Percona MongoDB HotBackup热备份原理：
 shell> yum install -y php-pear php-devel php gcc openssl openssl-devel cyrus-sasl cyrus-sasl-devel 
 
 2、php-mongo驱动安装：
+
 shell> pecl install mongo
+
 把extension=mongo.so加入到/etc/php.ini最后一行。
 
 3、创建mongodb超级用户权限（备份时使用）
+
 db.createUser({user:"admin",pwd:"123456",roles:[{role:"root",db:"admin"}]})
 
 4、修改pmongo_bak.php配置信息
@@ -76,10 +79,13 @@ $m = new MongoBak($user,$pwd,$host,$port,$authdb,$BAKDIR);
 ......
 
 5、前台运行：
+
 shell> php pmongo_bak.php（以root权限运行）
 
 6、写入系统crontab里
+
 00 01 * * * /usr/bin/php /root/php_mongodb/pmongo_bak.php > /root/php_mongodb/bak_status.log 2 >&1
 
 7、不支持远程备份，需将备份脚本部署在从库里。如果你想把数据备份到远程，可以采用NFS等文件系统mount挂载上。
+
 
