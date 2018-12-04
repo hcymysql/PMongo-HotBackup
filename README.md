@@ -83,6 +83,7 @@ $BAKDIR .= date('Y_m_d_H_i_s');
 //*************下面的代码不用修改***************//
 
 $m = new MongoBak($user,$pwd,$host,$port,$authdb,$BAKDIR);
+
 ......
 
 5、前台运行：
