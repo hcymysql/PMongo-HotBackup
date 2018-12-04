@@ -11,22 +11,28 @@ Percona MongoDB HotBackup热备份工具
 
 
 概述：
+
 Percona MongoDB3.2版本默认开始支持WiredTiger引擎的在线热备份，解决了官方版只能通过mongodump逻辑备份这一缺陷。
 参考文献：
+
 https://www.percona.com/doc/percona-server-for-mongodb/LATEST/hot-backup.html#hot-backup
 
 注意事项：1、要在当前dbpath中对数据库进行热备份，请在admin数据库上以管理员身份运行createBackup命令，并指定备份目录。
 	  2、可以替换一台从库为Percona MongoDB，做备份使用。（我这里实测是Percona MongoDB 3.4版本）
 
 Percona MongoDB HotBackup热备份原理：
+
 你可以想象成xtrabackup工具
+
 备份：
+
 1、首先会启动一个后台检测的进程，实时检测MongoDB Oplog的变化，一旦发现oplog有新的日志写入，立刻将日志写入到日志文件WiredTiger.backup中（你可以strings WiredTiger.backup查看oplog操作日志的变化）；
 
 2、复制MongoDB dbpath的数据文件和索引文件到指定的备份目录里。
 ......
 
 恢复：
+
 1、将WiredTiger.backup日志进行回放，将操作日志变更应用到WiredTiger引擎里，最终得到一致性快照恢复。
 
 2、把备份目录里的数据文件直接拷贝到你的dbpath下，然后启动MongoDB即可，会自动接入副本集集群。
