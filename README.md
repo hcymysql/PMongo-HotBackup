@@ -18,6 +18,7 @@ Percona MongoDB3.2版本默认开始支持WiredTiger引擎的在线热备份，�
 https://www.percona.com/doc/percona-server-for-mongodb/LATEST/hot-backup.html#hot-backup
 
 注意事项：
+
 1、要在当前dbpath中对数据库进行热备份，请在admin数据库上以管理员身份运行createBackup命令，并指定备份目录。
 
 2、可以替换一台从库为Percona MongoDB，做备份使用。（我这里实测是Percona MongoDB 3.4版本）
@@ -54,6 +55,7 @@ shell> pecl install mongo
 db.createUser({user:"admin",pwd:"123456",roles:[{role:"root",db:"admin"}]})
 
 4、修改pmongo_bak.php配置信息
+
 //*************修改下面的配置信息***************//
 $user = "admin"; //使用root用户权限
 
