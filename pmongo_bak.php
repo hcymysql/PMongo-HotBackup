@@ -34,37 +34,37 @@ Class MongoBak{
 
     function __construct(){ 
 	     $a = func_get_args();
-         $f = 'backup';
-         call_user_func_array(array($this,$f),$a); 
+            $f = 'backup';
+            call_user_func_array(array($this,$f),$a); 
     }
 
     function backup($p1,$p2,$p3,$p4,$p5,$p6){
-        $this->mkdirs("{$p6}");
+           $this->mkdirs("{$p6}");
 	    $mongo = new MongoClient("mongodb://{$p1}:{$p2}@{$p3}:{$p4}/{$p5}");
 	    $mongo->setReadPreference(MongoClient::RP_SECONDARY); //如果你想在主库上备份，把这行代码注销掉即可，并把脚本部署在主库上。
-        $db = $mongo->admin;
+           $db = $mongo->admin;
 	    echo "\n".date('Y-m-d H:i:s')."    backup is running......\n";
-        $r = $db->command(
+           $r = $db->command(
   	          array(
           	       'createBackup' => 1,
-                   'backupDir' => $p6),
-     	      array('timeout' => -1)    
+                    'backupDir' => $p6),
+     	          array('timeout' => -1)    
 	    );
 
 	//print_r($r); //调试备份错误日志使用，如备份失败，打开注释。
 
 	    if($r['ok'] == 1){
-  	        echo date('Y-m-d H:i:s')."    backup is success.\n";
+  	           echo date('Y-m-d H:i:s')."    backup is success.\n";
 	    } else{
       	    echo date('Y-m-d_H:i:s')."    backup is failure.\n";
 	    }	
     }
     
     function mkdirs($dir, $mode = 0777){
-    	if (!is_dir($dir)){
-            mkdir($dir, $mode);
+        if (!is_dir($dir)){
+            mkdir($dir, $mode, true);
             chmod($dir, $mode);
-            echo "${dir} is created.\n";
+            echo "BackupDir : ${dir} is created.\n";
     	}
     }
 
