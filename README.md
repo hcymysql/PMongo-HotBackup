@@ -1,5 +1,4 @@
-
-#Percona MongoDB HotBackup热备份工具
+Percona MongoDB HotBackup热备份工具
 
 前言：
 目前官方MongoDB社区版是不支持Hot Backup热备份的，我们只能通过mongodump等逻辑备份工具导出bson文件，再mongorestore导入，类似MySQL的mysqldump工具。
@@ -23,12 +22,15 @@ Percona MongoDB HotBackup热备份原理：
 你可以想象成xtrabackup工具
 备份：
 1、首先会启动一个后台检测的进程，实时检测MongoDB Oplog的变化，一旦发现oplog有新的日志写入，立刻将日志写入到日志文件WiredTiger.backup中（你可以strings WiredTiger.backup查看oplog操作日志的变化）；
+
 2、复制MongoDB dbpath的数据文件和索引文件到指定的备份目录里。
 ......
 
 恢复：
 1、将WiredTiger.backup日志进行回放，将操作日志变更应用到WiredTiger引擎里，最终得到一致性快照恢复。
+
 2、把备份目录里的数据文件直接拷贝到你的dbpath下，然后启动MongoDB即可，会自动接入副本集集群。
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 这里我封装了一个PHP脚本，直接在SHELL里运行即可。
@@ -45,11 +47,17 @@ db.createUser({user:"admin",pwd:"123456",roles:[{role:"root",db:"admin"}]})
 4、修改pmongo_bak.php配置信息
 //*************修改下面的配置信息***************//
 $user = "admin"; //使用root用户权限
+
 $pwd = '123456'; 
+
 $host = '192.168.180.26'; //在从库上热备
+
 $port = '27017';
+
 $authdb = 'admin'; //权限认证数据库
+
 $BAKDIR = "/data/bak/";
+
 $BAKDIR .= date('Y_m_d_H_i_s');
 
 //*************下面的代码不用修改***************//
