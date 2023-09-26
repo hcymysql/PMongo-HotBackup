@@ -19,7 +19,7 @@ Percona MongoDB3.2版本默认开始支持WiredTiger引擎的在线热备份，�
 
 参考文献：
 
-https://www.percona.com/doc/percona-server-for-mongodb/LATEST/hot-backup.html#hot-backup
+https://docs.percona.com/percona-server-for-mongodb/6.0/hot-backup.html
 
 注意事项：
 
