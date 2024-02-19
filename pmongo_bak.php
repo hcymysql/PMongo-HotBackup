@@ -15,7 +15,7 @@
  */
  
 ini_set('date.timezone','Asia/Shanghai');
-error_reporting(7);
+//error_reporting(7);
 
 //*************修改下面的配置信息***************//
 $user = "admin"; //使用root用户权限
@@ -24,7 +24,7 @@ $host = '192.168.180.26'; //在从库上热备
 $port = '27017';
 $authdb = 'admin'; //权限认证数据库
 $BAKDIR = "/data/bak/";
-$BAKDIR .= date('Y_m_d_H_i_s');
+$BAKDIR .= date('Y-m-d_H-i-s')."_bak";
 
 
 //*************下面的代码不用修改***************//
@@ -63,7 +63,7 @@ Class MongoBak{
     function mkdirs($dir, $mode = 0777){
         if (!is_dir($dir)){
             mkdir($dir, $mode, true);
-            chmod($dir, $mode);
+            //chmod($dir, $mode);
             echo "BackupDir : ${dir} is created.\n";
     	}
     }
