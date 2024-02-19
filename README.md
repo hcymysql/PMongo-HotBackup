@@ -1,5 +1,7 @@
 # Percona MongoDB HotBackup热备份工具
 
+视频演示：https://www.bilibili.com/video/BV1UJ4m1W7Yv/
+
 # 前言：
 
 目前官方MongoDB社区版是不支持Hot Backup热备份的，我们只能通过mongodump等逻辑备份工具导出bson文件，再mongorestore导入，类似MySQL的mysqldump工具。
